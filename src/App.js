@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import PokemonList from "./components/PokemonList";
 import PokemonDetails from "./components/PokemonDetails";
 import About from "./components/About";
+import styled from "styled-components";
 
 function App() {
   const [state, dispatch] = useReducer(reducer, {
@@ -23,7 +24,7 @@ function App() {
 
   useEffect(() => {
     var fetchedArray = [];
-    for (let i = 1; i <= 50; i++) {
+    for (let i = 1; i <= 150; i++) {
       fetch(`https://pokeapi.co/api/v2/pokemon/${i}`)
         .then((response) => response.json())
         .then((json) => fetchedArray.push(json))
@@ -36,14 +37,38 @@ function App() {
     }
   }, []);
 
+  const NavHeader = styled.div`
+    grid-row-start: 1;
+    grid-column-start: 1;
+    position: fixed;
+    background-color: yellow;
+    width: 100%;
+    height: 10%;
+    font-size: 40px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `;
+
+  const LinkStyle = {
+    flex: 1,
+    textDecoration: "underline",
+    color: "navy",
+    fontWeight: "bold",
+  };
+
   return (
     <Router>
       <div className="App container">
-        <h1 className="nav-header">
-          <Link to={"/"} style={{flex:1}}>Home</Link>
-          <span> </span>
-          <Link to={`/about`} style={{flex:1}}>About </Link>
-        </h1>
+        <NavHeader>
+          <Link to={"/"} style={LinkStyle}>
+            Home
+          </Link>
+          <Link to={`/about`} style={LinkStyle}>
+            About
+          </Link>
+        </NavHeader>
         <div className="main-area">
           <Switch>
             <Route

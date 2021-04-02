@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 export default function PokemonDetails({ match }) {
   const [currentPokemon, setPokemon] = useState({});
@@ -19,8 +19,20 @@ export default function PokemonDetails({ match }) {
       });
   }, [match.params.id]);
 
+  const BoxWrap = styled.div`
+    font-size: 30px;
+    border: 5px solid;
+    color: white;
+    background-color: navy;
+    padding: 10px;
+    margin: 10px;
+    
+  `;
+
+
   return (
-    <div style={{paddingTop: '50px'}}>
+    <BoxWrap>
+      {/*<div style={{paddingTop: '50px'}}>*/}
       Name: {currentPokemon.name},
       <br />
       Weight: {currentPokemon.weight}
@@ -32,7 +44,8 @@ export default function PokemonDetails({ match }) {
         src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${currentPokemon.id}.png`}
         alt={currentPokemon.name}
       />
-    </div>
+      {/* </div>  */}
+    </BoxWrap>
   );
 }
 
