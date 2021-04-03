@@ -9,6 +9,7 @@ import styled from "styled-components";
 function App() {
   const [state, dispatch] = useReducer(reducer, {
     pokemonList: [],
+    fetchedArray: [],
   });
   const { pokemonList } = state;
 
@@ -21,21 +22,34 @@ function App() {
         return state;
     }
   }
-
   useEffect(() => {
-    var fetchedArray = [];
-    for (let i = 1; i <= 150; i++) {
+    for (let i = 1; i <= 50; i++) {
       fetch(`https://pokeapi.co/api/v2/pokemon/${i}`)
         .then((response) => response.json())
-        .then((json) => fetchedArray.push(json))
+        .then((json) => state.fetchedArray.push(json))
         .then((foo) =>
           dispatch({
             type: "establishInitialPokemon",
-            payload: { pokemonList: fetchedArray },
+            payload: { pokemonList: state.fetchedArray },
           })
         );
     }
   }, []);
+
+  function handleChange(e) {
+    var pokeType = e.target.value === "default" ? "" : e.target.value;
+    state.pokemonList = state.fetchedArray;
+    dispatch({
+      type: "establishInitialPokemon",
+      payload: {
+        pokemonList: state.pokemonList.filter((pokemon) =>
+          pokemon.types[0].type.name
+            .toLowerCase()
+            .includes(pokeType.toLowerCase())
+        ),
+      },
+    });
+  }
 
   const NavHeader = styled.div`
     grid-row-start: 1;
@@ -60,6 +74,13 @@ function App() {
 
   return (
     <Router>
+      <select id="type" onChange={handleChange}>
+        <option value="default">Select Type</option>
+        <option value="Fire">Fire</option>
+        <option value="Water">Water</option>
+        <option value="Grass">Grass</option>
+        <option value="Electric">Electric</option>
+      </select>
       <div className="App container">
         <NavHeader>
           <Link to={"/"} style={LinkStyle}>
